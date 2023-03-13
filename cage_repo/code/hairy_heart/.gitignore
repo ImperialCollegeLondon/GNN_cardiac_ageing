@@ -1,0 +1,10 @@
+average_hearts*
+example.vtk
+loop_coordinates*
+matched_points*
+*.csv
+*.png
+*.pvsm
+tmp_*
+RV_ED_template_shinked.vtk
+RV_ED_template.vtk

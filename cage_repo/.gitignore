@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.idea/
+__pycache__/
+mlruns/
+data/*
+results/model_pkls
+results/optuna*
+lr_find_temp_model*
+lightning_logs/

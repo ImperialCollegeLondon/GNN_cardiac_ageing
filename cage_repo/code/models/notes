@@ -1,0 +1,9 @@
+# preprocessing
+cd ~/minacio/mirtk_python && docker build . -t mirtk_with_pandas
+mkdir -p ~/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_unified && sudo mount -t fuse -o dirs=~/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_01_2022:~/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_02_2022 -o allow_other funionfs#NONE ~/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_unified
+cd ~/minacio/cardiac_ageing && docker run -it --rm -w '/4ds' -v `pwd`:/4ds:Z -v $HOME/cardiac:/cardiac:Z -v /scratch/minacio:/scratch/minacio:Z -v /scratch/minacio/tmp_pickles_card_age:/tmp/tmp_pickles_card_age:Z mirtk_with_pandas /bin/bash -c 'PYTHONPATH=/usr/local/lib/mirtk/python ipython code/preprocessing/data_preprocessing_1.py --pdb -- --subject /cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_unified'
+cd ~/minacio/cardiac_ageing && docker run -it --rm -w '/4ds' -v `pwd`:/4ds:Z -v $HOME/cardiac:/cardiac:Z -v /scratch/minacio:/scratch/minacio:Z -v /scratch/minacio/tmp_pickles_card_age:/tmp/tmp_pickles_card_age:Z mirtk_with_pandas /bin/bash -c 'PYTHONPATH=/usr/local/lib/mirtk/python ipython code/preprocessing/data_preprocessing_2.py --pdb -- --mesh /cardiac/minacio/LVendo_ED_template.vtk --downsample-rate=97 --output=/scratch/minacio/cardiac_age_mesh_97.pkl'
+
+# running the model
+cd ~/minacio/cardiac_ageing/docker/ && docker build . -t cardiac_age
+cd ~/minacio/cardiac_ageing/code/models/ && cp run.py run_tmp.py && nvidia-docker run -it --rm -v /dev/shm/:/dev/shm:Z -v $HOME/cardiac:/root/cardiac:Z -v $HOME/minacio:/root/minacio:Z -v /scratch/minacio/:/scratch/minacio/:Z -w /root/${PWD#"$HOME"/} -e CUDA_VISIBLE_DEVICES='1' cardiac_age ipython --pdb run_tmp.py -- --modeln=mesh_only --esttype=gnn

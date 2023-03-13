@@ -1,0 +1,18 @@
+[project]
+name = "meshtools"
+description = "Mesh data prediction tools"
+version = "0.0.1"
+authors = [
+    { name = "Marco Inacio", email = "m@marcoinacio.com" }
+]
+dependencies = [
+    "pandas",
+    "scipy",
+    "pytorch",
+    "scikit-learn",
+    "pytorch_lightning",
+    "optuna",
+    "catboost",
+    "open3d",
+    "pyvista",
+]
