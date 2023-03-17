@@ -23,13 +23,13 @@ df_healthy = pd.read_csv(df_healthy)
 df_unhealthy = os.path.join(datadir, 'nonhealthyageinggroup_t1.csv')
 df_unhealthy = pd.read_csv(df_unhealthy)
 
-ids_healthy_train = home + '/cardiac/Ageing/gnn_paper/datasets/healthy_train_ids.csv'
+ids_healthy_train = 'healthy_train_ids.csv'
 ids_healthy_train = pd.read_csv(ids_healthy_train)
 
-ids_healthy_test = home + '/cardiac/Ageing/gnn_paper/datasets/healthy_test_ids.csv'
+ids_healthy_test = 'healthy_test_ids.csv'
 ids_healthy_test = pd.read_csv(ids_healthy_test)
 
-ids_unhealthy = home + '/cardiac/Ageing/gnn_paper/datasets/predicted_age.csv'
+ids_unhealthy = 'predicted_age.csv'
 ids_unhealthy = pd.read_csv(ids_unhealthy)
 
 df_healthy = df_healthy[df_healthy['eid_18545'].isin(ids_healthy_train['eid_18545']) | df_healthy['eid_18545'].isin(ids_healthy_test['eid_18545'])]
@@ -40,12 +40,12 @@ df_healthy['healthy'] = 1
 df_unhealthy['healthy'] = 0
 dfu = pd.concat((df_healthy, df_unhealthy), join='inner')
 
-dfe1 = home + '/cardiac/Ageing/data/z_Maria_datasets/phenotype_ukbb_all_imaging_instance.csv'
+dfe1 = 'phenotype_ukbb_all_imaging_instance.csv'
 dfe1 = pd.read_csv(dfe1)
 dfe1 = dfe1[["eid_40616", "SBP", "DBP", "Pulse"]]
 dfe1.columns = ["eid_40616", "SBP (mmHg)", "DBP (mmHg)", "PR (bpm)"]
 
-dfe2 = home + '/cardiac/Ageing/data/zz_Kath_dataset/ukbbMetaData_Kathryn_Copy.csv'
+dfe2 = 'ukbbMetaData_Kathryn_Copy.csv'
 dfe2 = pd.read_csv(dfe2)
 dfe2 = dfe2[["eid_40616", "bmi"]]
 dfe2.columns = ["eid_40616", "BMI (kg/m2)"]
@@ -110,7 +110,7 @@ for cgid, cnames in enumerate(cnames_groups):
     )
 
     plt.title('', fontsize=20)
-    plt.savefig(home+f"/cardiac/Ageing/gnn_paper/figures/joyplots/joyplot_v4_{cgid}.pdf")
+    plt.savefig(f"joyplot_v4_{cgid}.pdf")
     plt.close()
 
 # idea from https://stackoverflow.com/a/54870776
@@ -124,4 +124,4 @@ legend = plt.legend(handles, labels, loc=3, framealpha=1, frameon=False, ncol=2)
 fig  = legend.figure
 fig.canvas.draw()
 bbox  = legend.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-fig.savefig(home+f"/cardiac/Ageing/gnn_paper/figures/joyplots/joyplot_legend_v4.pdf", dpi="figure", bbox_inches=bbox)
+fig.savefig(f"joyplot_legend_v4.pdf", dpi="figure", bbox_inches=bbox)

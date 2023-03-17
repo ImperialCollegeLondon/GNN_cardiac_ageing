@@ -18,7 +18,7 @@ from colnames import lv_columns, non_lv_columns, t1_columns
 from meshtools import DatasetGeometric
 from captum.attr import Saliency, IntegratedGradients
 
-model_storage_dir = '/scratch/minacio/cardiac_age_best_models_storage_pkls'
+model_storage_dir = 'cardiac_age_best_models_storage_pkls'
 home = os.path.expanduser("~")
 
 

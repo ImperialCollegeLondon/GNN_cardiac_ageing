@@ -29,7 +29,7 @@ home = os.path.expanduser("~")
 def se_calculator(sample):
     return np.std(sample, ddof=1) / (np.sqrt(len(sample)))
 
-model_storage_dir = '/scratch/minacio/cardiac_age_best_models_storage_pkls'
+model_storage_dir = 'cardiac_age_best_models_storage_pkls'
 
 product_list = os.listdir(model_storage_dir)
 product_list = [x[:-4].split('_') for x in product_list]
@@ -88,7 +88,7 @@ for (esttype, modeln), raw_res_i in raw_res.items():
     plt.ylim([preds.min(), preds.max()])
     plt.xlabel('Age at MRI')
     plt.ylabel('Cardiac-predicted age (years)')
-    f.savefig(home+f"/cardiac/Ageing/gnn_paper/figures/other/{human_readable_name}.pdf", bbox_inches='tight')
+    f.savefig(home+f"{human_readable_name}.pdf", bbox_inches='tight')
     plt.close()
 #plt.show()
 

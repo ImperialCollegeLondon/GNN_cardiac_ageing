@@ -30,7 +30,7 @@ def standardize(x):
     x = x.reshape(shape)
     return x
 
-model_storage_dir = '/scratch/minacio/cardiac_age_best_models_storage_pkls'
+model_storage_dir = 'cardiac_age_best_models_storage_pkls'
 home = os.path.expanduser("~")
 
 product_list = os.listdir(model_storage_dir)
@@ -143,14 +143,14 @@ for frame in [0, 10, 20, 30, 40]:
                         plotter.add_mesh(polydata, scalars=mask, line_width=10,
                             cmap='hot_r', clim=[0, 1])
                         plotter.add_text(f'{age}s', position='upper_left')
-                        folder = f"{home}/cardiac/Ageing/gnn_paper/figures/explainer/v2/plots/decimation_{decimate_level}/explainer_{explainer_model}/mask_type_{mask_type}"
+                        folder = f"explainer/v2/plots/decimation_{decimate_level}/explainer_{explainer_model}/mask_type_{mask_type}"
                         os.makedirs(folder, exist_ok=True)
                         plotter.show(
                             cpos=[-1, -1, 0.3], screenshot=
                             f"{folder}/explainer_age_{age}s_{healthy}_frame_{frame}.png",
                         )
 
-                folder = f"{home}/cardiac/Ageing/gnn_paper/figures/explainer/v2/vtks/decimation_{decimate_level}"
+                folder = f"explainer/v2/vtks/decimation_{decimate_level}"
                 os.makedirs(folder, exist_ok=True)
                 polydata['node_mask_p'] = expl.node_mask.cpu().detach().numpy()
                 polydata['edge_mask_p'] = expl.edge_mask.cpu().detach().numpy()

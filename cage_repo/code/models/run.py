@@ -16,9 +16,9 @@ from colnames import non_lv_columns, lv_columns, t1_columns
 
 from meshtools import LitNN, DataModule, train_with_hyp_search, mtest
 
-optuna_storage_dir = '/scratch/minacio/cardiac_age_optuna_storage_pkls'
+optuna_storage_dir = 'cardiac_age_optuna_storage_pkls'
 optuna_sql_path = '/dev/shm/optuna_experiments_cardiac_ageing.db'
-model_storage_dir = '/scratch/minacio/cardiac_age_best_models_storage_pkls'
+model_storage_dir = 'cardiac_age_best_models_storage_pkls'
 home = os.path.expanduser("~")
 
 if __name__ == '__main__':
@@ -53,13 +53,11 @@ if __name__ == '__main__':
     #torch.manual_seed(1)
 
     curdir = os.path.dirname(os.path.realpath(__file__))
-    datadir = os.path.join(curdir, '../../data')
+    datadir = os.path.join(curdir, 'data')
     #mesh_path = os.path.join(datadir, 'downsampled_descriptor_98.9.pkl')
     #if esttype == 'gnn':
     #mesh_path = os.path.join(datadir, 'downsampled_descriptor_97.0.pkl')
-    mesh_path = '/scratch/minacio/cardiac_age_mesh_97.0.pkl'
-    mesh_path = '/scratch/minacio/cardiac_age_mesh_90.0.pkl'
-    mesh_path = '/scratch/minacio/cardiac_age_mesh_98.9.pkl'
+    mesh_path = 'cardiac_age_mesh_97.0.pkl'
     data_path = os.path.join(datadir, 'healthyageinggroup_t1.csv')
 
     # obtain mesh data and ids
@@ -190,13 +188,13 @@ if __name__ == '__main__':
     print(test_inputv.shape, 'test shape')
 
     # Export ids
-    db_export_path = home + '/cardiac/Ageing/gnn_paper/datasets/healthy_train_ids.csv'
+    db_export_path = 'healthy_train_ids.csv'
     ids_to_export = df_cp_all[np.isin(df_cp_all.eid_18545, train_ids_cp)]
     ids_to_export = ids_to_export[['eid_40616', 'eid_18545']]
     ids_to_export.to_csv(db_export_path)
     print(ids_to_export.shape[0], 'train length')
 
-    db_export_path = home + '/cardiac/Ageing/gnn_paper/datasets/healthy_test_ids.csv'
+    db_export_path = 'healthy_test_ids.csv'
     ids_to_export = df_cp_all[np.isin(df_cp_all.eid_18545, test_ids_cp)]
     ids_to_export = ids_to_export[['eid_40616', 'eid_18545']]
     ids_to_export.to_csv(db_export_path)
@@ -217,7 +215,7 @@ if __name__ == '__main__':
     if False and esttype == 'catb' and modeln == 'lv_nlv_t1':
         # Export a dataset of the covariates on train set
         train_inputv_df = pd.DataFrame(train_inputv, columns = lv_columns + non_lv_columns + t1_columns)
-        train_inputv_df.to_csv(home+'/cardiac/Ageing/marco/original_db.csv', index=False)
+        train_inputv_df.to_csv('original_db.csv', index=False)
         print('original_db.csv generated')
 
         # Export the filtered dataset with response variable, covariates, train/test indicator and ids
@@ -229,13 +227,13 @@ if __name__ == '__main__':
         full_df_with_train_and_test = full_df_with_train_and_test.join(df_cp_all.set_index('eid_18545')[['eid_40616']], on='eid_18545')
         full_df_with_train_and_test['train'] = 0
         full_df_with_train_and_test.iloc[:len(train_inputv), -1] = 1
-        full_df_with_train_and_test.to_csv(home+'/cardiac/Ageing/marco/full_df_with_train_and_test.csv', index=False)
+        full_df_with_train_and_test.to_csv('full_df_with_train_and_test.csv', index=False)
 
         # Create and export a synthetic dataset
         model = GaussianCopula()
         model.fit(full_df)
         synthetic_df = model.sample(len(full_df))
-        synthetic_df.to_csv('/root/cardiac/Ageing/marco/synthetic_db_healthy.csv', index=False)
+        synthetic_df.to_csv('synthetic_db_healthy.csv', index=False)
         print('/synthetic_db_healthy.csv generated')
 
     study_completed = False
@@ -263,11 +261,10 @@ if __name__ == '__main__':
         if esttype == 'gnn':
             kwargs.update(dict(
                     searchdirs = [
-                        home+'/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_01_2022',
-                        home+'/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_02_2022',
+                        '/mesh_data_source',
                     ],
-                    items_cache_dir = '/scratch/minacio/cache_items_cardiac_age',
-                    vtk_cache_dir =   '/scratch/minacio/cache_vtks_cardiac_age',
+                    items_cache_dir = 'cache_items_cardiac_age',
+                    vtk_cache_dir =   'cache_vtks_cardiac_age',
                     gnn_decimate_level = gnn_decimate_level,
             ))
         best_creg, best_params, study_completed, study = train_with_hyp_search(**kwargs)

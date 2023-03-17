@@ -28,7 +28,7 @@ from rpy2.robjects import pandas2ri
 home = os.path.expanduser("~")
 
 # Load the trained model
-model_storage_dir = '/scratch/minacio/cardiac_age_best_models_storage_pkls'
+model_storage_dir = 'cardiac_age_best_models_storage_pkls'
 product_list = os.listdir(model_storage_dir)
 product_list = [x[:-4].split('_') for x in product_list]
 product_list = [(x[0], '_'.join(x[1:])) for x in product_list]
@@ -43,14 +43,14 @@ assert len(loaded_res) == 7
 model = loaded_res['best_creg'].to('cuda')
 
 # Get ids, age and sex of unhealthy the patients
-df = pd.read_csv('../../data/COPYcHTN_unselected11049_bridged.csv')
-dfn = pd.read_csv('../../data/nonhealthyageinggroup_t1.csv')
+df = pd.read_csv('COPYcHTN_unselected11049_bridged.csv')
+dfn = pd.read_csv('nonhealthyageinggroup_t1.csv')
 df = df.join(dfn.set_index('eid_40616')[['age_at_MRI', 'sex']], on='eid_40616')
 df['healthy'] = 0
 
 # Get ids, age and sex of healthy the patients
-dfh = pd.read_csv('../../data/healthyageinggroup_t1.csv')
-ids = pd.read_csv(home + '/cardiac/Ageing/gnn_paper/datasets/healthy_test_ids.csv')
+dfh = pd.read_csv('healthyageinggroup_t1.csv')
+ids = pd.read_csv('healthy_test_ids.csv')
 dfh = dfh[dfh['eid_18545'].isin(ids['eid_18545'])]
 assert len(dfh) == len(ids)
 dfh = dfh[['eid_40616', 'eid_18545', 'age_at_MRI', 'sex']]
@@ -58,11 +58,7 @@ dfh['healthy'] = 1
 
 df = pd.concat((dfh, df))
 
-searchdirs = [
-    home+'/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_diseasegroups/htn',
-    home+'/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_01_2022',
-    home+'/cardiac/UKBB_40616/UKBB_motion_analysis/results/UKBB_02_2022',
-]
+searchdirs = ['/mesh_data_source']
 
 # remove patients without motion files
 ids_with_motion = [os.listdir(x) for x in searchdirs]
@@ -75,8 +71,8 @@ dataset = DatasetGeometric(
     list_of_patients,
     transforms_names=model.transforms_names,
     searchdirs=searchdirs,
-    items_cache_dir = '/scratch/minacio/cache_items_cardiac_age',
-    vtk_cache_dir = '/scratch/minacio/cache_vtks_cardiac_age',
+    items_cache_dir = 'cache_items_cardiac_age',
+    vtk_cache_dir = 'cache_vtks_cardiac_age',
     decimate_level=.9)
 
 # Predict using trained model
@@ -174,7 +170,7 @@ for healthy_indicator, healthy_str in enumerate(['unhealthy', 'healthy']):
     colour = 'black',
     fill = 'grey'
   )
-  ggsave("{home + f"/cardiac/Ageing/gnn_paper/figures/pred_age_delta/pred_age_vs_chron_age_ggplot_{healthy_str}.pdf"}", res)
+  ggsave("{f"pred_age_vs_chron_age_ggplot_{healthy_str}.pdf"}", res)
   p1 <- ggplot(df[df$healthy=={healthy_indicator},], aes(x=age_at_MRI, y=delta_cole_bias_corrected)) +
     geom_point(alpha=0.1, colour="dodgerblue1", pch=19, position = position_jitter(width = .5)) +
     stat_density2d(geom="density2d", aes(alpha=..level..), colour="dodgerblue4", size=1.5, contour=TRUE) +
@@ -189,7 +185,7 @@ for healthy_indicator, healthy_str in enumerate(['unhealthy', 'healthy']):
     colour = 'black',
     fill = 'grey'
   )
-  ggsave("{home + f"/cardiac/Ageing/gnn_paper/figures/pred_age_delta/age_delta_vs_chron_age_ggplot_{healthy_str}.pdf"}", res)
+  ggsave("{f"age_delta_vs_chron_age_ggplot_{healthy_str}.pdf"}", res)
   """)
 
 # Propensity matching
@@ -202,7 +198,7 @@ mod_match <- matchit(I(1-healthy) ~ age_at_MRI + sex,
 dta_m <- match.data(mod_match)
 """)
 
-db_path_matched = home+'/cardiac/Ageing/gnn_paper/datasets/predicted_age_propensity_matched.csv'
+db_path_matched = 'predicted_age_propensity_matched.csv'
 df_matched.to_csv(db_path_matched, index=False)
 
 

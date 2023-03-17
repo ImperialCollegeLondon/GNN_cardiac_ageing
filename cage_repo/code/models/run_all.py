@@ -35,8 +35,8 @@ for esttype, modeln in product_list:
     screen_name = f'{cuda_dev_id} {modeln} {esttype}'
 
     cmd = 'nvidia-docker run -it --rm '
-    cmd += '-v /dev/shm/:/dev/shm:Z -v $HOME/cardiac:/root/cardiac:Z -v $HOME/minacio:/root/minacio:Z '
-    cmd += '-v $HOME/.cache:/root/.cache:Z -v /scratch/minacio/:/scratch/minacio/:Z -w /root/${PWD#"$HOME"/} '
+    cmd += '-v /dev/shm/:/dev/shm:Z '
+    cmd += '-v $HOME/.cache:/root/.cache:Z -w /root/${PWD#"$HOME"/} '
     cmd += f'--memory=50g --cpus=15 -e CUDA_VISIBLE_DEVICES={cuda_dev_id} '
     cmd += f'meshtools ipython run_tmp.py -- --modeln={modeln} --esttype={esttype} --n_trials=100'
     if esttype == 'gnn':
