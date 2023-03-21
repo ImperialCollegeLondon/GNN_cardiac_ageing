@@ -1,4 +1,4 @@
-# Cardiac age prediction using graph neural networks for motion analysis
+# Cardiac age prediction using graph neural networks on time-resolved three-dimensional image data
 
 First, let's assume that your input mesh data is located at /mesh_data_source
 
@@ -117,3 +117,7 @@ You can change the age group and baseline of relative motion by change the follo
   loop_coordinates_file_baseline='loop_coordinates_50_unhealthy.txt'
   loop_coordinates_file='loop_coordinates_70_unhealthy.txt'
 ```  
+
+## Citation
+Inacio MH de A, Shah M, Jafari M, Shehata N, Meng Q, Bai W, Gandy A, Glocker B, O'Regan DP. Cardiac age prediction using graph
+neural networks. _medRxiv_. 2023. doi: [xxx](xxx)
